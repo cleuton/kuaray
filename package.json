@@ -1,0 +1,10 @@
+{
+ "name" : "teste1",
+ "version" : "0.0.1",
+ "author" : "Cleuton Sampaio",
+ "dependencies" : {
+   "sleep" : "*",
+   "rpio" : "*",
+   "raspi-sensors": "*"
+  }
+}
