@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/cleuton/kuaray#readme",
   "dependencies": {
+    "base-64": "^0.1.0",
     "body-parser": "^1.15.2",
+    "crypto": "0.0.3",
     "express": "^4.14.0"
   },
   "devDependencies": {
