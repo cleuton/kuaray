@@ -1,0 +1,1 @@
+openssl s_client -debug -connect ag5gey6c1j11p.iot.us-east-1.amazonaws.com:8443 -CAfile security/root-ca.crt -cert security/a9e3f5315b-certificate.pem.crt -key security/a9e3f5315b-private.pem.key

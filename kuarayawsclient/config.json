@@ -1,0 +1,8 @@
+{
+    "securityPath" : "security_certificates",
+    "keyPath": "security_certificates/kuaraynode.private.key",
+    "certPath": "security_certificates/kuaraynode.cert.pem",
+    "caPath": "security_certificates/root-CA.crt",
+    "clientId": "kuaraynode",
+    "region": "us-east-1"
+}

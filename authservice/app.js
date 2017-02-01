@@ -4,6 +4,9 @@ var app = express();
 var bodyParser = require("body-parser");
 var crypto = require('crypto');
 var base64 = require('base-64');
+var fs = require('fs');
+var pem = fs.readFileSync('../../../cert/cleutonsampaio.key');
+var key = pem.toString('ascii');
 
 //********************************
 var serverName = "MyTest01";
@@ -11,7 +14,7 @@ var minutes = 1;
 //********************************
 /*
   pending: 
-  a) Sign the hash with a private key;
+  a) Parametrizar caminho...
   b) Authenticate userName and password using a database or a file
 */
 
@@ -27,15 +30,15 @@ var tokenGenerator = function(username, ipAddress, serverName, loginDate, minute
   var timeoutDate = new Date(loginDate.getTime() 
     + minutesValid * 60000);
   token.timeout = timeoutDate;
-  var tokenToSign = token.userName + ":" 
-                  + token.loginDate + ":"
-                  + token.originalIp + ":"
-                  + token.timeout + ":"
+  var tokenToSign = token.userName + ";" 
+                  + token.loginDate + ";"
+                  + token.originalIp + ";"
+                  + token.timeout + ";"
                   + token.serverName;
-  var md5sum = crypto.createHash('md5');                  
-  md5sum.update(tokenToSign);                  
-  token.signature = md5sum.digest('hex');
-  tokenToSign += ":" + token.signature;
+  var sign = crypto.createSign('RSA-SHA256');
+  sign.update(tokenToSign);
+  token.signature = sign.sign(key, 'hex');               
+  tokenToSign += ";" + token.signature;
   
   return base64.encode(tokenToSign); 
 }
