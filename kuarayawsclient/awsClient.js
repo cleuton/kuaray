@@ -17,6 +17,8 @@ function client() {
                         console.log(JSON.stringify(global.config.caPath));
                         console.log(JSON.stringify(global.config.clientId));
                         console.log(JSON.stringify(global.config.region));
+                        console.log(JSON.stringify(global.config.measureIntervalSeconds));
+                        console.log(JSON.stringify(global.config.sendIntervalSeconds));
 
                          selfRef.device = awsIot.device({
                             keyPath: global.config.keyPath,

@@ -62,8 +62,7 @@ var callback = function(err, data) {
 			DHT22.fetchClear();
 			rpio.spiEnd();
 		}
-	}
-	
+	}	
 };
 
 DHT22.fetchInterval(callback,5);
