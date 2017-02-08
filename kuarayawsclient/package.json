@@ -1,10 +1,11 @@
 {
   "name": "kuarayawsclient",
   "version": "0.0.1",
-  "license": "Apache-2.0", 
-  "private" : true, 
+  "license": "Apache-2.0",
+  "private": true,
   "dependencies": {
-        "aws-iot-device-sdk" : "*",
-        "promise" : "*"
-    }
+    "aws-iot-device-sdk": "*",
+    "promise": "*",
+    "uuid": "^3.0.1"
+  }
 }

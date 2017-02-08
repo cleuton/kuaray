@@ -1,5 +1,6 @@
 var Client = require('./awsClient');
 var http = require('http');
+var Kuaraymeasure = require('./kuaraymeasure');
 
 var client = new Client();
 var httpServer = http.createServer(
@@ -11,11 +12,15 @@ var httpServer = http.createServer(
 client.start().then(
     function() {
         console.log('OK callback 2');
-        var msg = {
-            "id": "msg01",
-            "txt": "Ok", 
-            "time" : new Date()
-        }
+        var msg = new Kuaraymeasure('kuaraynode',
+                            new Date(),
+                            34.50,
+                            68,
+                            150,
+                            -43.123,
+                            -22.123
+                            );
+        console.log(333);
         client.send(msg);
         console.log('message.sent');
         process.nextTick();
