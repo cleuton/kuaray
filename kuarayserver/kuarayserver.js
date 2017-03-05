@@ -52,7 +52,7 @@ function initMeasure() {
     return obj;
 }
 
-var sendToBackend(lastMeasure) {
+var sendToBackend = function(lastMeasure) {
 
 }
 
