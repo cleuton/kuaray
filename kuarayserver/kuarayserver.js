@@ -59,6 +59,7 @@ var sendToBackend = function(lastMeasure) {
 }
 
 var callback = function(err, data) {
+console.log("#1 callback " + JSON.stringify(data));    
     if(err) {
         console.error("An error occured!"); 
         console.error(err.cause);   
@@ -69,6 +70,9 @@ var callback = function(err, data) {
     // Primeiro vem a temperatura, podemos ver a qualidade do ar em separado,
     // depois vem a umidade. Só depois de termos as 3 medidas é que 
     // podemos calcular a média  
+
+console.log("#2 callback " + JSON.stringify(data));    
+    
     if(lastMeasure.temperature != null 
        && lastMeasure.humidity != null
        && lastMeasure.quality != null) {
@@ -79,12 +83,17 @@ var callback = function(err, data) {
     }
     if(data.type == "Humididy") {
         lastMeasure.humidity = value;
+console.log("#3 callback " + JSON.stringify(lastMeasure));    
+
     }
     else if(data.type == "Temperature") {
         lastMeasure.temperature = value;
+console.log("#4 callback " + JSON.stringify(lastMeasure));    
     }
     if(data.quality != "undefined" && data.quality != null) {
         lastMeasure.quality = data.quality;
+console.log("#5 callback " + JSON.stringify(lastMeasure));    
+        
     }
 
 
