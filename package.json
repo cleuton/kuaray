@@ -6,6 +6,8 @@
    "sleep" : "*",
    "rpio" : "*",
    "raspi-sensors": "*", 
-   "promise" : "*"
+   "promise" : "*",
+    "aws-iot-device-sdk": "*",
+    "uuid": "^3.0.1"   
   }
 }
