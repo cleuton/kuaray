@@ -5,6 +5,7 @@
  "dependencies" : {
    "sleep" : "*",
    "rpio" : "*",
-   "raspi-sensors": "*"
+   "raspi-sensors": "*", 
+   "promise" : "*"
   }
 }
