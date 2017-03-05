@@ -47,7 +47,8 @@ var DHT22 = new RaspiSensors.Sensor({
 });
 
 function initMeasure() {
-    var obj = new Kuaraymeasure(global.config.clientId, 
+    // Temos que alterar isso depois, quando estivermos usando AWS: 
+    var obj = new Kuaraymeasure("Kuaray01", 
     new Date(), null, null, null, 0,0);
     return obj;
 }
