@@ -37,7 +37,7 @@ var receiveBuffer = new Buffer(sendBuffer.length);
 
 var httpServer = http.createServer(
     function(request,response) {
-        response.write(JSON.stringify(stats));
+        response.write(JSON.stringify(lastMeasure));
         response.end();
     }
 );
