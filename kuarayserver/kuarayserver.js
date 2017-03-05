@@ -22,7 +22,7 @@ var Client = require('../kuarayawsclient/awsClient');
 var http = require('http');
 var Kuaraymeasure = require('../kuarayawsclient/kuaraymeasure');
 
-var client = new Client();
+//var client = new Client();
 var lastMeasure = initMeasure();
 var stats = {};
 var gotTemp = false;
