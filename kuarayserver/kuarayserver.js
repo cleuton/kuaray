@@ -82,12 +82,12 @@ console.log("#2 callback " + JSON.stringify(data));
            lastMeasure = initMeasure();
     }
     if(data.type == "Humididy") {
-        lastMeasure.humidity = value;
+        lastMeasure.humidity = data.value;
 console.log("#3 callback " + JSON.stringify(lastMeasure));    
 
     }
     else if(data.type == "Temperature") {
-        lastMeasure.temperature = value;
+        lastMeasure.temperature = data.value;
 console.log("#4 callback " + JSON.stringify(lastMeasure));    
     }
     if(data.quality != "undefined" && data.quality != null) {
