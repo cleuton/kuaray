@@ -117,6 +117,7 @@ function getData(data) {
 
 
 // msg = Kuaraymeasure
+/*
 var sendMsg = function(msg) {
     client.send(msg);
 }
@@ -129,7 +130,7 @@ client.start().then(
         console.log('ERROR1: ' + error.message);
     }
 );
-
+*/
 httpServer.listen(3000, function(){
     console.log("Kuaray server listening on 3000");
 });
