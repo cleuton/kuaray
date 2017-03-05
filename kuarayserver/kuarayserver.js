@@ -81,7 +81,7 @@ console.log("#2 callback " + JSON.stringify(data));
            stats = lastMeasure;
            lastMeasure = initMeasure();
     }
-    if(data.type == "Humididy") {
+    if(data.type == "Humidity") {
         lastMeasure.humidity = data.value;
 console.log("#3 callback " + JSON.stringify(lastMeasure));    
 
