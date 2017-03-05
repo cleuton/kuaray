@@ -23,6 +23,7 @@ var http = require('http');
 var Kuaraymeasure = require('../kuarayawsclient/kuaraymeasure');
 
 var client = new Client();
+var lastMeasure = initMeasure();
 var stats = {};
 var gotTemp = false;
 var gotHum = false;
@@ -45,6 +46,16 @@ var DHT22 = new RaspiSensors.Sensor({
     pin: 0x7
 });
 
+function initMeasure() {
+    var obj = new Kuaraymeasure(global.config.clientId, 
+    new Date(), null, null, null, 0,0);
+    return obj;
+}
+
+var sendToBackend(lastMeasure) {
+
+}
+
 var callback = function(err, data) {
     if(err) {
         console.error("An error occured!"); 
@@ -53,10 +64,28 @@ var callback = function(err, data) {
         return;
     }
     getData(data);
-    stats.date = new Date();
     // Primeiro vem a temperatura, podemos ver a qualidade do ar em separado,
     // depois vem a umidade. Só depois de termos as 3 medidas é que 
     // podemos calcular a média  
+    if(lastMeasure.temperature != null 
+       && lastMeasure.humidity != null
+       && lastMeasure.quality != null) {
+           lastMeasure.date = new Date();
+           sendToBackend(lastMeasure);
+           stats = lastMeasure;
+           lastMeasure = initMeasure();
+    }
+    if(data.type == "Humididy") {
+        lastMeasure.humidity = value;
+    }
+    else if(data.type == "Temperature") {
+        lastMeasure.temperature = value;
+    }
+    if(data.quality != "undefined" && data.quality != null) {
+        lastMeasure.quality = data.quality;
+    }
+
+
 };
 
 var startServices = function() {
@@ -70,7 +99,9 @@ function getData(data) {
             MSB = receiveBuffer[1],
             LSB = receiveBuffer[2];
     var value = ((MSB & 3) << 8) + LSB; 
-    data.airQuality =  value;
+    if(value != null && value != 0) {
+        data.quality = value;
+    }
 } 
 
 
