@@ -101,7 +101,7 @@ console.log("#5 callback " + JSON.stringify(lastMeasure));
 
 var startServices = function() {
     rpio.spiBegin();
-    DHT22.fetchInterval(callback,global.config.measureIntervalSeconds);
+    DHT22.fetchInterval(callback, 5/*global.config.measureIntervalSeconds*/);
 }
 
 function getData(data) {
