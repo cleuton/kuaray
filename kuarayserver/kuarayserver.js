@@ -134,4 +134,5 @@ client.start().then(
 httpServer.listen(3000, function(){
     console.log("Kuaray server listening on 3000");
 });
+startServices(); // Retirar essa linha quando o AWS estiver ok
 
