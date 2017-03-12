@@ -18,6 +18,8 @@ http://kuaray.org
    limitations under the License.
 */
 
+// To start use: sudo node kuarayserver <latitude> <longitude>
+
 var Client = require('../kuarayawsclient/awsClient');
 var http = require('http');
 var Kuaraymeasure = require('../kuarayawsclient/kuaraymeasure');
@@ -34,6 +36,8 @@ var RaspiSensors = require('raspi-sensors');
 
 var sendBuffer = new Buffer([0x01, (8 + 0 << 4), 0x01]); 
 var receiveBuffer = new Buffer(sendBuffer.length);
+var latitude = 0;
+var longitude = 0;
 
 var httpServer = http.createServer(
     function(request,response) {
@@ -49,8 +53,10 @@ var DHT22 = new RaspiSensors.Sensor({
 
 function initMeasure() {
     // Temos que alterar isso depois, quando estivermos usando AWS: 
+    latitude = process.argv[2];
+    longitude = process.argv[3];
     var obj = new Kuaraymeasure("Kuaray01", 
-    new Date(), null, null, null, 0,0);
+    new Date(), null, null, null, latitude,longitude);
     return obj;
 }
 
