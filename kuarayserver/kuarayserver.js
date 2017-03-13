@@ -87,7 +87,15 @@ function initStats() {
 */
 
 var sendToBackend = function(lastMeasure) {
-
+    Assert.exists(global.config.clientId);
+    var msg = new Kuaraymeasure(global.config.clientId, stats.data, 
+        stats.acumTemp / stats.contaTemp, 
+        stats.acumUmid / stats.contaUmid, 
+        stats.acumQuali / stats.contaQuali, 
+        latitude, longitude);
+    client.send(msg);
+    // Last command:
+    initStats();
 }
 
 /* Callback de coleta */
@@ -107,7 +115,6 @@ console.log("#2 callback " + JSON.stringify(data));
     if(lastMeasure.temperature != null 
        && lastMeasure.humidity != null
        && lastMeasure.quality != null) {
-           //sendToBackend(lastMeasure);
            storedMeasure = lastMeasure;
            lastMeasure = initMeasure();
     }
@@ -133,15 +140,20 @@ console.log("#5 callback " + JSON.stringify(lastMeasure));
     }
 };
 
+/* Start background collect services */
+
 var startServices = function() {
-    /*
-        Inicia os serviços de coleta e de transmissão.
-    */
     rpio.spiBegin();
     Assure.exists(global.config.measureIntervalSeconds,'global.config.measureIntervalSeconds NE')
     .number(global.config.measureIntervalSeconds,'global.config.measureIntervalSeconds invalido');
     DHT22.fetchInterval(callback, global.config.measureIntervalSeconds);
+    initStats();
+    Assure.exists(global.config.sendIntervalSeconds,'global.config.sendIntervalSeconds NE')
+    .number(global.config.sendIntervalSeconds,'global.config.sendIntervalSeconds inválido');
+    setInterval(sendToBackend(), global.config.sendIntervalSeconds * 1000);
 }
+
+/* Gets RPIO data */
 
 function getData(data) {
     rpio.spiTransfer(sendBuffer, receiveBuffer, sendBuffer.length);
@@ -154,12 +166,7 @@ function getData(data) {
     }
 } 
 
-
-// msg = Kuaraymeasure
-/*
-var sendMsg = function(msg) {
-    client.send(msg);
-}
+// START THE AWS CLIENT AND SERVICES: *********************
 
 client.start().then(
     function() {
@@ -169,9 +176,11 @@ client.start().then(
         console.log('ERROR1: ' + error.message);
     }
 );
-*/
+
+
+/* Make the server listen to connections */
+
 httpServer.listen(3000, function(){
     console.log("Kuaray server listening on 3000");
 });
-startServices(); // Retirar essa linha quando o AWS estiver ok
 
