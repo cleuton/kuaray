@@ -8,6 +8,7 @@
    "raspi-sensors": "*", 
    "promise" : "*",
     "aws-iot-device-sdk": "*",
-    "uuid": "^3.0.1"   
+    "uuid": "^3.0.1", 
+    "assert" : "*"   
   }
 }

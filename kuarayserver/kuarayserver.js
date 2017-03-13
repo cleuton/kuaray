@@ -23,9 +23,10 @@ http://kuaray.org
 var Client = require('../kuarayawsclient/awsClient');
 var http = require('http');
 var Kuaraymeasure = require('../kuarayawsclient/kuaraymeasure');
-
-//var client = new Client();
+var Assure = require('../util/assure');
+var client = new Client();
 var lastMeasure = initMeasure();
+var storedMeasure = {};
 var stats = {};
 var gotTemp = false;
 var gotHum = false;
@@ -39,9 +40,11 @@ var receiveBuffer = new Buffer(sendBuffer.length);
 var latitude = 0;
 var longitude = 0;
 
+/* Callback de processamento de request de status via Web */
+
 var httpServer = http.createServer(
     function(request,response) {
-        response.write(JSON.stringify(lastMeasure));
+        response.write(JSON.stringify(storedMeasure));
         response.end();
     }
 );
@@ -51,18 +54,43 @@ var DHT22 = new RaspiSensors.Sensor({
     pin: 0x7
 });
 
+/* Init last measure variable. Each time we have all 3 data */
+
 function initMeasure() {
     // Temos que alterar isso depois, quando estivermos usando AWS: 
     latitude = process.argv[2];
     longitude = process.argv[3];
-    var obj = new Kuaraymeasure("Kuaray01", 
+    lastMeasure = new Kuaraymeasure("Kuaray01", 
     new Date(), null, null, null, latitude,longitude);
-    return obj;
 }
+
+/* 
+    This inits stats variable 
+    which will be sent to backend
+*/
+
+function initStats() {
+    stats = {};
+    stats.acumTemp = 0.0;
+    stats.contaTemp = 0;
+    stats.acumUmid = 0.0;
+    stats.contaUmid = 0;
+    stats.acumQuali = 0.0;
+    stats.contaQuali = 0;
+    stats.data = new Date();
+}
+
+
+/* 
+ This will send data to backend using AWS 
+ Invoked at intervals controlled by config.json "sendIntervalSeconds"
+*/
 
 var sendToBackend = function(lastMeasure) {
 
 }
+
+/* Callback de coleta */
 
 var callback = function(err, data) {
 console.log("#1 callback " + JSON.stringify(data));    
@@ -73,41 +101,46 @@ console.log("#1 callback " + JSON.stringify(data));
         return;
     }
     getData(data);
-    // Primeiro vem a temperatura, podemos ver a qualidade do ar em separado,
-    // depois vem a umidade. Só depois de termos as 3 medidas é que 
-    // podemos calcular a média  
 
 console.log("#2 callback " + JSON.stringify(data));    
     
     if(lastMeasure.temperature != null 
        && lastMeasure.humidity != null
        && lastMeasure.quality != null) {
-           lastMeasure.date = new Date();
-           sendToBackend(lastMeasure);
-           stats = lastMeasure;
+           //sendToBackend(lastMeasure);
+           storedMeasure = lastMeasure;
            lastMeasure = initMeasure();
     }
     if(data.type == "Humidity") {
         lastMeasure.humidity = data.value;
+        stats.contaUmid++;
+        stats.acumUmid += data.value;
 console.log("#3 callback " + JSON.stringify(lastMeasure));    
 
     }
     else if(data.type == "Temperature") {
         lastMeasure.temperature = data.value;
+        stats.contaTemp++;
+        stats.contaTemp += data.value;        
 console.log("#4 callback " + JSON.stringify(lastMeasure));    
     }
     if(data.quality != "undefined" && data.quality != null) {
         lastMeasure.quality = data.quality;
+        stats.contaQuali++;
+        stats.acumQuali += data.value;        
 console.log("#5 callback " + JSON.stringify(lastMeasure));    
         
     }
-
-
 };
 
 var startServices = function() {
+    /*
+        Inicia os serviços de coleta e de transmissão.
+    */
     rpio.spiBegin();
-    DHT22.fetchInterval(callback, 5/*global.config.measureIntervalSeconds*/);
+    Assure.exists(global.config.measureIntervalSeconds,'global.config.measureIntervalSeconds NE')
+    .number(global.config.measureIntervalSeconds,'global.config.measureIntervalSeconds invalido');
+    DHT22.fetchInterval(callback, global.config.measureIntervalSeconds);
 }
 
 function getData(data) {
