@@ -31,14 +31,14 @@ function client() {
 
                         selfRef.device
                         .on('connect', function() {
-                            console.log('connect');
+                            console.log('\n********** Device connect');
                             selfRef.device.subscribe('kuaraytopic');
                             fulfill();
                             });
 
                         selfRef.device
                         .on('message', function(topic, payload) {
-                            console.log('message', topic, payload.toString());
+                            console.log('\n ******** &&&&&& message', topic, payload.toString());
                         });
                         console.log('exiting ok callback');
                     },
@@ -52,7 +52,7 @@ function client() {
     }
     selfRef.send = function(data) {
         var stringmsg = JSON.stringify(data);
-        console.log('publishing: ' + stringmsg);
+        console.log('\n******* ****** publishing: ' + stringmsg);
         selfRef.device.publish('kuaraytopic',stringmsg);
     }
 }

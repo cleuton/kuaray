@@ -25,7 +25,7 @@ var http = require('http');
 var Kuaraymeasure = require('../kuarayawsclient/kuaraymeasure');
 var Assure = require('../util/assure');
 var client = new Client();
-var lastMeasure = initMeasure();
+var lastMeasure = {};
 var storedMeasure = {};
 var stats = {};
 var gotTemp = false;
@@ -87,7 +87,7 @@ function initStats() {
 */
 
 var sendToBackend = function(lastMeasure) {
-    Assert.exists(global.config.clientId);
+    Assure.exists(global.config.clientId);
     var msg = new Kuaraymeasure(global.config.clientId, stats.data, 
         stats.acumTemp / stats.contaTemp, 
         stats.acumUmid / stats.contaUmid, 
@@ -111,12 +111,12 @@ console.log("#1 callback " + JSON.stringify(data));
     getData(data);
 
 console.log("#2 callback " + JSON.stringify(data));    
-    
+console.log("#2 lastMeasure = " + JSON.stringify(lastMeasure));
     if(lastMeasure.temperature != null 
        && lastMeasure.humidity != null
        && lastMeasure.quality != null) {
            storedMeasure = lastMeasure;
-           lastMeasure = initMeasure();
+           initMeasure();
     }
     if(data.type == "Humidity") {
         lastMeasure.humidity = data.value;
@@ -143,6 +143,7 @@ console.log("#5 callback " + JSON.stringify(lastMeasure));
 /* Start background collect services */
 
 var startServices = function() {
+    initMeasure();
     rpio.spiBegin();
     Assure.exists(global.config.measureIntervalSeconds,'global.config.measureIntervalSeconds NE')
     .number(global.config.measureIntervalSeconds,'global.config.measureIntervalSeconds invalido');

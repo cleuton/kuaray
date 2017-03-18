@@ -6,5 +6,5 @@
     "clientId": "kuaraynode",
     "region": "us-east-1",
     "measureIntervalSeconds" : 5,
-    "sendIntervalSeconds" : 60
+    "sendIntervalSeconds" : 15
 }
