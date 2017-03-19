@@ -105,7 +105,6 @@ var sendToBackend = function(lastMeasure) {
 /* Callback de coleta */
 
 var callback = function(err, data) {
-console.log("#1 callback " + JSON.stringify(data));    
     if(err) {
         console.error("An error occured!"); 
         console.error(err.cause);   
@@ -114,8 +113,6 @@ console.log("#1 callback " + JSON.stringify(data));
     }
     getData(data);
 
-console.log("#2 callback " + JSON.stringify(data));    
-console.log("#2 lastMeasure = " + JSON.stringify(lastMeasure));
     if(lastMeasure.temperature != null 
        && lastMeasure.humidity != null
        && lastMeasure.quality != null) {
@@ -126,20 +123,17 @@ console.log("#2 lastMeasure = " + JSON.stringify(lastMeasure));
         lastMeasure.humidity = data.value;
         stats.contaUmid++;
         stats.acumUmid += data.value;
-console.log("#3 callback " + JSON.stringify(lastMeasure));    
 
     }
     else if(data.type == "Temperature") {
         lastMeasure.temperature = data.value;
         stats.contaTemp++;
-        stats.contaTemp += data.value;        
-console.log("#4 callback " + JSON.stringify(lastMeasure));    
+        stats.acumTemp += data.value;        
     }
     if(data.quality != "undefined" && data.quality != null) {
         lastMeasure.quality = data.quality;
         stats.contaQuali++;
         stats.acumQuali += data.value;        
-console.log("#5 callback " + JSON.stringify(lastMeasure));    
         
     }
 };
@@ -155,7 +149,7 @@ var startServices = function() {
     initStats();
     Assure.exists(global.config.sendIntervalSeconds,'global.config.sendIntervalSeconds NE')
     .number(global.config.sendIntervalSeconds,'global.config.sendIntervalSeconds inválido');
-    setInterval(sendToBackend(), global.config.sendIntervalSeconds * 1000);
+    setInterval(sendToBackend, global.config.sendIntervalSeconds * 1000);
 }
 
 /* Gets RPIO data */
