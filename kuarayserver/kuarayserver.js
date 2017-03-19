@@ -88,14 +88,18 @@ function initStats() {
 
 var sendToBackend = function(lastMeasure) {
     Assure.exists(global.config.clientId);
-    var msg = new Kuaraymeasure(global.config.clientId, stats.data, 
-        stats.acumTemp / stats.contaTemp, 
-        stats.acumUmid / stats.contaUmid, 
-        stats.acumQuali / stats.contaQuali, 
-        latitude, longitude);
-    client.send(msg);
-    // Last command:
-    initStats();
+    if(stats.acumTemp != 0
+       && stats.acumUmid != 0
+       && stats.acumQuali != 0) {
+        var msg = new Kuaraymeasure(global.config.clientId, stats.data, 
+            (stats.acumTemp / stats.contaTemp), 
+            (stats.acumUmid / stats.contaUmid), 
+            (stats.acumQuali / stats.contaQuali), 
+            latitude, longitude);
+        client.send(msg);
+        // Last command:
+        initStats();
+       }
 }
 
 /* Callback de coleta */
