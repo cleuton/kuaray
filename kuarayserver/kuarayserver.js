@@ -111,13 +111,20 @@ var callback = function(err, data) {
 		rpio.spiEnd();    
         return;
     }
-    getData(data);
-
     if(lastMeasure.temperature != null 
        && lastMeasure.humidity != null
        && lastMeasure.quality != null) {
            storedMeasure = lastMeasure;
            initMeasure();
+    }
+    if(lastMeasure.quality == null) {
+        // Get quality only once
+        getData(data);
+        if(data.quality != null) {
+            lastMeasure.quality = data.quality;
+            stats.acumQuali += lastMeasure.quality;
+            stats.contaQuali++;
+        }
     }
     if(data.type == "Humidity") {
         lastMeasure.humidity = data.value;
@@ -129,12 +136,6 @@ var callback = function(err, data) {
         lastMeasure.temperature = data.value;
         stats.contaTemp++;
         stats.acumTemp += data.value;        
-    }
-    if(data.quality != "undefined" && data.quality != null) {
-        lastMeasure.quality = data.quality;
-        stats.contaQuali++;
-        stats.acumQuali += data.value;        
-        
     }
 };
 
