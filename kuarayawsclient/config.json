@@ -5,6 +5,6 @@
     "caPath": "/home/cleuton/repository/kuaray/kuarayserver/certpath/root-CA.crt",
     "clientId": "kuaraynode",
     "region": "us-east-1",
-    "measureIntervalSeconds" : 5,
-    "sendIntervalSeconds" : 15
+    "measureIntervalSeconds" : 15,
+    "sendIntervalSeconds" : 60
 }
