@@ -9,12 +9,21 @@ exports.handler = function(event, context) {
     var params = {
         TableName : "kuaraymeasures"
     };
+    
+    var response = {
+    "statusCode": 200,
+    "headers": { "Content-type": "application/json"},
+    "body": ""
+    }
 
-    docClient.query(params, function(err, data) {
+    dynamo.scan(params, function(err, data) {
         if (err) {
-            context = "Unable to query. Error: " + "\n" + JSON.stringify(err, undefined, 2;
+            response.statusCode = 500;
+            response.body = {"message" : "Unable to query. Error: " + "\n" + JSON.stringify(err, undefined, 2)};
+            context.fail(response);
         } else {
-             context = "Querying for movies from 1985: " + "\n" + JSON.stringify(data, undefined, 2);
+            response.body = data;
+             context.succeed(response);
         }
     });   
 
