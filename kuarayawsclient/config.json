@@ -1,8 +1,8 @@
 {
-    "securityPath" : "/home/cleuton/repository/kuaray/kuarayserver/certpath",
-    "keyPath": "/home/cleuton/repository/kuaray/kuarayserver/certpath/kuaraynode.private.key",
-    "certPath": "/home/cleuton/repository/kuaray/kuarayserver/certpath/kuaraynode.cert.pem",
-    "caPath": "/home/cleuton/repository/kuaray/kuarayserver/certpath/root-CA.crt",
+    "securityPath" : "/home/cleuton/kuaray/kuarayserver/certpath",
+    "keyPath": "/home/cleuton/kuaray/kuarayserver/certpath/kuaraynode.private.key",
+    "certPath": "/home/cleuton/kuaray/kuarayserver/certpath/kuaraynode.cert.pem",
+    "caPath": "/home/cleuton/kuaray/kuarayserver/certpath/root-CA.crt",
     "clientId": "kuaraynode",
     "region": "us-east-1",
     "measureIntervalSeconds" : 15,

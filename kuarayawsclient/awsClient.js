@@ -25,7 +25,8 @@ function client() {
                             certPath: global.config.certPath,
                             caPath: global.config.caPath,
                             clientId: global.config.clientId,
-                            region: global.config.region
+                            region: global.config.region,
+                            host: 'ag5gey6c1j11p.iot.us-east-1.amazonaws.com'
                         });
                         console.log(selfRef);
 
